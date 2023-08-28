@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "seed": "npx ts-node seed/seed.ts",
-    "test": "jest --detectOpenHandles --coverage",
+    "test": "jest --coverage",
     "test:watch": "jest --watchAll --detectOpenHandles --coverage",
     "build": "tsc && tsc-alias",
     "start": "node dist/src/index.js",

@@ -19,15 +19,16 @@ describe("User Routes", () => {
     const response = await request(app)
       .post("/api/user")
       .send({
-        firstName: "John",
-        lastName: "Doe",
-        username: "johndoe",
+        firstName: "test",
+        lastName: "user",
+        username: "testuser",
         password: "password123",
       })
       .set("Authorization", `Bearer ${token}`);
     id = response.body.id;
+    console.log(response.body);
     expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("username", "johndoe");
+    expect(response.body).toHaveProperty("username", "testuser");
   });
 
   it("should update a user", async () => {
@@ -35,8 +36,8 @@ describe("User Routes", () => {
       .put("/api/user")
       .send({
         id: id,
-        firstName: "UpdatedJohn",
-        lastName: "UpdatedDoe",
+        firstName: "UpdatedTest",
+        lastName: "UpdatedUser",
       })
       .set("Authorization", `Bearer ${token}`);
 
@@ -56,6 +57,7 @@ describe("User Routes", () => {
   });
 
   it("should delete a user by ID", async () => {
+    console.log(id);
     const response = await request(app).delete(`/api/user/${id}`).set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);

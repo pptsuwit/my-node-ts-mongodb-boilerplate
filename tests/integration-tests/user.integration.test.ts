@@ -26,7 +26,6 @@ describe("User Routes", () => {
       })
       .set("Authorization", `Bearer ${token}`);
     id = response.body.id;
-    console.log(response.body);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("username", "testuser");
   });
@@ -57,7 +56,6 @@ describe("User Routes", () => {
   });
 
   it("should delete a user by ID", async () => {
-    console.log(id);
     const response = await request(app).delete(`/api/user/${id}`).set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);

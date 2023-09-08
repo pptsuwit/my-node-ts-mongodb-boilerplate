@@ -8,3 +8,5 @@ const databseUrl = process.env.DATABASE_URL || "";
 mongoose.connect(databseUrl);
 mongoose.Promise = global.Promise;
 export { User, Customer, RefreshToken, isValidId };
+const db = { User, Customer, RefreshToken, isValidId };
+export default db;

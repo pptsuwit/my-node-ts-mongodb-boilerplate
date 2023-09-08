@@ -248,7 +248,7 @@ describe("Customer Controller", () => {
 
   describe("exportExcel", () => {
     it("should export customers to Excel", async () => {
-      let testFilePath = __dirname.split("\\test").slice(0, -1).join("\\") + "\\";
+      let testFilePath = __dirname.split("\\__tests__").slice(0, -1).join("\\") + "\\";
       testFilePath = testFilePath.split("\\").slice(0, -1).join("\\") + "\\";
       testFilePath = `${testFilePath}src\\controllers\\customer.xlsx`;
       const mockFilePath = testFilePath;
@@ -261,7 +261,6 @@ describe("Customer Controller", () => {
 
         callback(undefined); // Simulate a successful download
       });
-
       await exportExcel(mockRequest, mockResponse, mockNext);
 
       expect(mockExportToExcel).toHaveBeenCalledWith(mockFilePath);

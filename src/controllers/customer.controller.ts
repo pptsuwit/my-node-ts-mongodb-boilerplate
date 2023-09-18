@@ -129,8 +129,14 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
-    const users = await service.getAll();
-    res.json(users);
+    const page: number = parseInt(req.query.page as string) || 1;
+    const pageSize: number = parseInt(req.query.pageSize as string) || 10;
+    const users = await service.getAll(page, pageSize);
+
+    res.json({
+      data: users,
+      pagination: { page: page, totalPage: users.length },
+    });
   } catch (error) {
     next(error);
   }

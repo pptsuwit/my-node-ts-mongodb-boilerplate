@@ -10,8 +10,11 @@ export default {
   // exportToPDF,
 };
 
-async function getAll() {
-  const entity = await db.Customer.find();
+async function getAll(page: number = 1, pageSize: number = 10) {
+  const entity = await db.Customer.find()
+    .sort({ _id: -1 })
+    .skip((page - 1) * pageSize)
+    .limit(pageSize);
   return entity.map((entity: customerModel) => details(entity));
 }
 

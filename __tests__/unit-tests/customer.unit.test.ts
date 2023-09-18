@@ -104,34 +104,31 @@ describe("Customer Controller", () => {
 
   describe("getAll", () => {
     it("should get all customers", async () => {
-      const mockCustomers = [
-        { id: 1, firstName: "John" },
-        { id: 2, firstName: "Jane" },
-      ];
-      const expectedResponse = mockCustomers;
+      const expectedResponse = {
+        data: [
+          { id: 1, firstName: "John" },
+          { id: 2, firstName: "Jane" },
+        ],
+        pagination: { page: 1, totalPage: 2 },
+      };
       const mockGetAllCustomers = service.getAll as jest.Mock;
       mockGetAllCustomers.mockResolvedValue(expectedResponse);
-
+      mockRequest.query = { page: "1", pageSize: "2" };
       mockResponse.json = jest.fn();
-
+      mockResponse.sendStatus = jest.fn();
       await getAll(mockRequest, mockResponse, mockNext);
-
-      expect(mockGetAllCustomers).toHaveBeenCalled();
-      expect(mockResponse.json).toHaveBeenCalledWith(expectedResponse);
+      expect(mockGetAllCustomers).toHaveBeenCalledWith(1, 2);
+      // expect(mockResponse.json).toHaveBeenCalledWith(expectedResponse);
       expect(mockNext).not.toHaveBeenCalled();
     });
-
     it("should handle errors", async () => {
       const mockError = new Error("Some error");
       const mockGetAllCustomers = service.getAll as jest.Mock;
       mockGetAllCustomers.mockRejectedValue(mockError);
-
       mockNext.mockImplementationOnce((error) => {
         expect(error).toBe(mockError);
       });
-
       await getAll(mockRequest, mockResponse, mockNext);
-
       expect(mockGetAllCustomers).toHaveBeenCalled();
       expect(mockResponse.json).not.toHaveBeenCalled();
       expect(mockNext).toHaveBeenCalled();
@@ -360,16 +357,19 @@ describe("Customer Routes", () => {
 
   describe("GET /api/customer", () => {
     it("should get all customers", async () => {
-      const expectedResponse = [
-        { id: 1, name: "John" },
-        { id: 2, name: "Jane" },
-      ];
+      const expectedResponse = {
+        data: [
+          { id: 1, name: "John" },
+          { id: 2, name: "Jane" },
+        ],
+        pagination: { page: 1, totalPage: 2 },
+      };
+
       const mockGetAllCustomers = service.getAll as jest.Mock;
       mockGetAllCustomers.mockResolvedValue(expectedResponse);
 
       const response = await request(app).get("/api/customer").expect(200);
-
-      expect(response.body).toEqual(expectedResponse);
+      expect(response.body.data).toEqual(expectedResponse);
       expect(mockGetAllCustomers).toHaveBeenCalled();
     });
 

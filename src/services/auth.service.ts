@@ -2,9 +2,9 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { loginModel, registerModel, refreshTokenModel, revokeTokenModel } from "../models/auth.model";
-import { userModel } from "../models/user.model";
-import { userDetails } from "../utils/utils";
-const db = require("../db/connect");
+import { userModel } from "@models/user.model";
+import { userDetails } from "@utils/utils";
+const db = require("@config/database");
 
 export default {
   login,

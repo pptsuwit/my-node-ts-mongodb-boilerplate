@@ -1,20 +1,13 @@
+import "module-alias/register";
 import "dotenv/config";
+
 // import cookieParser from "cookie-parser";
 // const cors = require("cors");
 // import swaggerRouter from "./_helpers/swagger";
-import createServer from "./utils/server";
+import createServer from "@config/server";
 const app = createServer();
 
 // app.use(cookieParser());
-
-// app.use(
-//   cors({
-//     origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-//       callback(null, true);
-//     },
-//     credentials: true,
-//   })
-// );
 
 // app.use("/api-docs", swaggerRouter);
 

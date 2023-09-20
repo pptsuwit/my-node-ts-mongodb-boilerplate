@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-import { userModel } from "../models/user.model";
+import { userModel } from "@models/user.model";
 
 export function isValidId(id: string) {
   return mongoose.Types.ObjectId.isValid(id);

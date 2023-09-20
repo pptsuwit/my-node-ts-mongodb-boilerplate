@@ -1,8 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import Joi from "joi";
-import validateRequest from "../middlewares/validate-request";
-import { authorize } from "../middlewares/authorize";
-import service from "../services/auth.service";
+import validateRequest from "@middlewares/validate-request";
+import { authorize } from "@middlewares/authorize";
+import service from "@services/auth.service";
 
 const router = express.Router();
 

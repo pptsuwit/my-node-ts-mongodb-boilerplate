@@ -1,5 +1,5 @@
-const db = require("../db/connect");
-import { customerModel, createCustomerModel } from "../models/customer.model";
+const db = require("@config/database");
+import { customerModel, createCustomerModel } from "@models/customer.model";
 export default {
   getAll,
   getById,

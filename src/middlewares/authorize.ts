@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-const db = require("../db/connect");
+const db = require("../config/database");
 export const authorize = async (req: Request, res: Response, next: NextFunction) => {
   // Get the token from the request headers
   const token = req.header("Authorization")?.split(" ")[1];

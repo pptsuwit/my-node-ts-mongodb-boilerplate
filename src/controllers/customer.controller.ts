@@ -1,21 +1,61 @@
-import express, { Request, Response, NextFunction } from "express";
-import { authorize } from "../middlewares/authorize";
-import service from "../services/customer.service";
+import { Request, Response, NextFunction } from "express";
+import service from "@services/customer.service";
+import { customerModel } from "@models/customer.model";
 
 import PDFDocument from "pdfkit";
 import * as path from "path";
-const router = express.Router();
 
-router.get("/customer-export-excel", exportExcel);
-router.get("/customer-export-pdf", exportPDF);
-router.get("/customer", authorize, getAll);
-router.get("/customer/:id", authorize, getById);
+export async function getAll(req: Request, res: Response, next: NextFunction) {
+  try {
+    const page: number = parseInt(req.query.page as string) || 1;
+    const pageSize: number = parseInt(req.query.pageSize as string) || 10;
+    const users = await service.getAll(page, pageSize);
 
-router.post("/customer", authorize, create);
-router.put("/customer", authorize, update);
-router.delete("/customer/:id", authorize, deleteById);
+    res.json({
+      data: users,
+      pagination: { page: page, totalPage: users.length },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
 
-export default router;
+export async function getById(req: Request, res: Response, next: NextFunction) {
+  try {
+    const entity = await service.getById(req.params.id);
+    entity ? res.json(entity) : res.sendStatus(404);
+  } catch (error) {
+    next(error);
+  }
+}
+export async function create(req: Request, res: Response, next: NextFunction) {
+  const { firstName, lastName, email, phone, birthdate, address } = req.body;
+  try {
+    const entity = await service.createCustomer({ firstName, lastName, email, phone, birthdate, address });
+    res.json(entity);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function update(req: Request, res: Response, next: NextFunction) {
+  const { id, firstName, lastName, email, phone, birthdate, address } = req.body;
+  try {
+    const entity = await service.updateCustomerById({ id, firstName, lastName, email, phone, birthdate, address });
+    res.json(entity);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteById(req: Request, res: Response, next: NextFunction) {
+  try {
+    const entity = await service.deleteById(req.params.id);
+    entity ? res.json(entity) : res.sendStatus(404);
+  } catch (error) {
+    next(error);
+  }
+}
 
 export async function exportExcel(req: Request, res: Response, next: NextFunction) {
   try {
@@ -31,7 +71,6 @@ export async function exportExcel(req: Request, res: Response, next: NextFunctio
     next(error);
   }
 }
-import { customerModel } from "@models/customer.model";
 export async function exportPDF(req: Request, res: Response, next: NextFunction) {
   try {
     const fileName = "customer_report.pdf";
@@ -102,59 +141,6 @@ export async function exportPDF(req: Request, res: Response, next: NextFunction)
 
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function create(req: Request, res: Response, next: NextFunction) {
-  const { firstName, lastName, email, phone, birthdate, address } = req.body;
-  try {
-    const entity = await service.createCustomer({ firstName, lastName, email, phone, birthdate, address });
-    res.json(entity);
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function update(req: Request, res: Response, next: NextFunction) {
-  const { id, firstName, lastName, email, phone, birthdate, address } = req.body;
-  try {
-    const entity = await service.updateCustomerById({ id, firstName, lastName, email, phone, birthdate, address });
-    res.json(entity);
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function getAll(req: Request, res: Response, next: NextFunction) {
-  try {
-    const page: number = parseInt(req.query.page as string) || 1;
-    const pageSize: number = parseInt(req.query.pageSize as string) || 10;
-    const users = await service.getAll(page, pageSize);
-
-    res.json({
-      data: users,
-      pagination: { page: page, totalPage: users.length },
-    });
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function getById(req: Request, res: Response, next: NextFunction) {
-  try {
-    const entity = await service.getById(req.params.id);
-    entity ? res.json(entity) : res.sendStatus(404);
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function deleteById(req: Request, res: Response, next: NextFunction) {
-  try {
-    const entity = await service.deleteById(req.params.id);
-    entity ? res.json(entity) : res.sendStatus(404);
   } catch (error) {
     next(error);
   }

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"; // Import types as needed
 import { exportPDF, exportExcel, create, update, getAll, getById, deleteById } from "../../src/controllers/customer.controller"; // Replace with actual module path
 import service from "../../src/services/customer.service";
-import createServer from "../../src/utils/server";
+import createServer from "../../src/config/server";
 import PDFDocument from "pdfkit";
 const request = require("supertest");
 const app = createServer();

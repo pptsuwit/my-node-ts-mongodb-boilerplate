@@ -1,6 +1,6 @@
 import request from "supertest";
 
-import createServer from "../../src/utils/server";
+import createServer from "../../src/config/server";
 const app = createServer();
 let testId = "";
 let token = "";

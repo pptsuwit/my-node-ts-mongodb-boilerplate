@@ -1,8 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
-import { authorize } from "../middlewares/authorize";
-import service from "../services/user.service";
+import { authorize } from "@middlewares/authorize";
+import service from "@services/user.service";
 
-import logger from "../utils/logger";
+import logger from "@utils/logger";
 const router = express.Router();
 
 router.get("/user", authorize, getAll);

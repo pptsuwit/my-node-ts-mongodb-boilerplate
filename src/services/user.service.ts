@@ -1,4 +1,4 @@
-const db = require("../db/connect");
+const db = require("../config/database");
 import { userModel } from "../models/user.model";
 import { registerModel } from "../models/auth.model";
 import { userDetails } from "../utils/utils";

@@ -1,7 +1,7 @@
 const request = require("supertest");
 const jwt = require("jsonwebtoken");
 import "dotenv/config";
-import createServer from "../../src/utils/server";
+import createServer from "../../src/config/server";
 const app = createServer();
 
 describe("Customer API", () => {

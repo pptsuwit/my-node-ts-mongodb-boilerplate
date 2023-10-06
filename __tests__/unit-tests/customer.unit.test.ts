@@ -9,6 +9,7 @@ jest.mock("../../src/services/customer.service", () => ({
   createCustomer: jest.fn(),
   updateCustomerById: jest.fn(),
   getAll: jest.fn(),
+  getAllData: jest.fn(),
   getById: jest.fn(),
   deleteById: jest.fn(),
   exportToExcel: jest.fn(),
@@ -319,7 +320,7 @@ describe("Customer Controller", () => {
         // Add more mock data as needed
       ];
 
-      (service.getAll as jest.Mock).mockResolvedValue(mockData);
+      (service.getAllData as jest.Mock).mockResolvedValue(mockData);
 
       const mockPDFDoc = new PDFDocument(); // You can also mock the PDFDocument class
       const pipeMock = jest.fn();
@@ -335,7 +336,7 @@ describe("Customer Controller", () => {
       // Test other expectations based on your code
 
       // Ensure the service.getAll() is called
-      expect(service.getAll).toHaveBeenCalled();
+      expect(service.getAllData).toHaveBeenCalled();
 
       // Ensure the response headers are set correctly
       expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "application/pdf");
@@ -362,14 +363,15 @@ describe("Customer Routes", () => {
           { id: 1, name: "John" },
           { id: 2, name: "Jane" },
         ],
-        pagination: { page: 1, totalPage: 2 },
+        pagination: { page: 1, pageSize: 2, totalPage: null },
       };
 
       const mockGetAllCustomers = service.getAll as jest.Mock;
       mockGetAllCustomers.mockResolvedValue(expectedResponse);
 
       const response = await request(app).get("/api/customer").expect(200);
-      expect(response.body.data).toEqual(expectedResponse);
+      console.log(response.body);
+      expect(response.body).toEqual(expectedResponse);
       expect(mockGetAllCustomers).toHaveBeenCalled();
     });
 

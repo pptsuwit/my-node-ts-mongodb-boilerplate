@@ -4,7 +4,6 @@ const db = require("../config/database");
 export const authorize = async (req: Request, res: Response, next: NextFunction) => {
   // Get the token from the request headers
   const token = req.header("Authorization")?.split(" ")[1];
-
   if (!token) {
     return res.status(401).json({ message: "Access denied. No token provided." });
   }
@@ -19,6 +18,9 @@ export const authorize = async (req: Request, res: Response, next: NextFunction)
     // req.user!.ownsToken = (token: string) => !!refreshTokens.find((x: any) => x.token === token);
     next();
   } catch (error) {
+    if (error instanceof Error) {
+      return res.status(401).json({ message: error.message });
+    }
     next(error);
   }
   // try {

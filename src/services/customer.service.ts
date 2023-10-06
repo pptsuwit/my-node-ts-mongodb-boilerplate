@@ -7,15 +7,30 @@ export default {
   updateCustomerById,
   createCustomer,
   exportToExcel,
+  getAllData,
   // exportToPDF,
 };
-
+async function countData() {
+  return await db.Customer.count({});
+}
 async function getAll(page: number = 1, pageSize: number = 10) {
   const entity = await db.Customer.find()
     .sort({ _id: -1 })
     .skip((page - 1) * pageSize)
     .limit(pageSize);
-  return entity.map((entity: customerModel) => details(entity));
+
+  const data = entity.map((entity: customerModel) => {
+    return details(entity);
+  });
+  const totalData = await countData();
+  return { data, totalData };
+}
+async function getAllData() {
+  const entity = await db.Customer.find();
+
+  return entity.map((entity: customerModel) => {
+    return details(entity);
+  });
 }
 
 async function getById(id: string) {
@@ -91,7 +106,7 @@ export async function exportToExcel(filePath: string) {
   const worksheet = workbook.addWorksheet("Sheet 1");
 
   const header = ["customerId", "firstName", "lastName", "email", "phone", "birthdate", "address"];
-  const entity = await getAll();
+  const entity = await db.Customer.find();
 
   // Add header row
   worksheet.addRow(header);

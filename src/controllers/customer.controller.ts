@@ -4,16 +4,16 @@ import { customerModel } from "@models/customer.model";
 
 import PDFDocument from "pdfkit";
 import * as path from "path";
+import { getTotalPageSize } from "@utils/utils";
 
 export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
     const page: number = parseInt(req.query.page as string) || 1;
     const pageSize: number = parseInt(req.query.pageSize as string) || 10;
-    const users = await service.getAll(page, pageSize);
-
+    const data = await service.getAll(page, pageSize);
     res.json({
-      data: users,
-      pagination: { page: page, totalPage: users.length },
+      data: data.data,
+      pagination: { page: page, pageSize: data.data.length, totalPage: getTotalPageSize(data.totalData, pageSize) },
     });
   } catch (error) {
     next(error);
@@ -76,7 +76,7 @@ export async function exportPDF(req: Request, res: Response, next: NextFunction)
     const fileName = "customer_report.pdf";
     const header = "Customer Report";
 
-    const data = await service.getAll();
+    const data = await service.getAllData();
 
     const doc = new PDFDocument({ size: "A4", margin: 10 });
     doc.pipe(res); // Send the PDF as response

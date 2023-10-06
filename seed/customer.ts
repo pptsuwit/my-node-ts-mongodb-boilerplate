@@ -1,6 +1,6 @@
 import "dotenv/config";
 import mongoose from "mongoose";
-const databseUrl = process.env.DATABASE_URL || "";
+const databseUrl = process.env.DATABASE_SEED_URL || "";
 
 import { CustomerModel } from "../src/models/customer.model";
 export class mockModel {

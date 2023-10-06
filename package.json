@@ -13,7 +13,7 @@
     "@routes": "dist/src/routes"
   },
   "scripts": {
-    "seed": "npx ts-node seed/seed.ts",
+    "seed": "ts-node seed/seed.ts",
     "test": "jest --coverage",
     "test:watch": "jest --watchAll --detectOpenHandles --coverage",
     "build": "tsc && tsc-alias",

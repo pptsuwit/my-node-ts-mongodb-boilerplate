@@ -75,7 +75,6 @@ async function register({ firstName, lastName, username, password }: registerMod
 
 // async function getRefreshToken(id: string) {
 //   const refreshToken = await db.RefreshToken.findOne({ user: id }).populate("user");
-//   console.log(refreshToken);
 //   if (!refreshToken || !refreshToken) throw new Error("Invalid token x");
 //   return refreshToken;
 // }

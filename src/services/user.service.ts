@@ -1,7 +1,7 @@
 const db = require("../config/database");
 import { userModel } from "../models/user.model";
 import { registerModel } from "../models/auth.model";
-import { userDetails } from "../utils/utils";
+import { userDetails as details } from "../utils/utils";
 import bcrypt from "bcryptjs";
 export default {
   getAll,
@@ -12,14 +12,33 @@ export default {
   createUser,
 };
 
-async function getAll() {
+// async function getAll() {
+//   const entity = await db.User.find();
+//   return entity.map((entity: userModel) => details(entity));
+// }
+async function getAll(page: number = 1, pageSize: number = 10) {
+  const entity = await db.User.find()
+    .sort({ _id: -1 })
+    .skip((page - 1) * pageSize)
+    .limit(pageSize);
+
+  const data = entity.map((entity: userModel) => {
+    return details(entity);
+  });
+  const totalData = await countData();
+  return { data, totalData };
+}
+async function getAllData() {
   const entity = await db.User.find();
-  return entity.map((entity: userModel) => userDetails(entity));
+
+  return entity.map((entity: userModel) => {
+    return details(entity);
+  });
 }
 
 async function getById(id: string) {
   const entity = await getUser(id);
-  return userDetails(entity);
+  return details(entity);
 }
 
 async function createUser({ firstName, lastName, username, password }: registerModel) {
@@ -31,18 +50,18 @@ async function createUser({ firstName, lastName, username, password }: registerM
   });
 
   return {
-    ...userDetails(entity),
+    ...details(entity),
   };
 }
 async function updateUserById({ id, firstName, lastName, username }: userModel) {
   await updateUser({ id, firstName, lastName, username });
   const entity = await getUser(id);
-  return userDetails(entity);
+  return details(entity);
 }
 
 async function deleteById(id: string) {
   const entity = await deleteUser(id);
-  return userDetails(entity);
+  return details(entity);
 }
 
 // db functions
@@ -76,4 +95,8 @@ async function deleteUser(id: string) {
   const entity = await db.User.findByIdAndDelete(id);
   if (!entity) throw new Error("User not found");
   return entity;
+}
+
+async function countData() {
+  return await db.User.count({});
 }

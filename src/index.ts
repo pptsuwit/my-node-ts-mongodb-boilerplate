@@ -29,7 +29,6 @@ app.post("/api/upload", upload.single("file"), (req: Request, res: Response) => 
 app.get("/api/download/:filename", (req: Request, res: Response) => {
   const filename = req.params.filename;
   const filePath = path.join(__dirname, "uploads", filename);
-  console.log(filePath);
   // Check if the file exists
   if (fs.existsSync(filePath)) {
     res.download(filePath, filename);

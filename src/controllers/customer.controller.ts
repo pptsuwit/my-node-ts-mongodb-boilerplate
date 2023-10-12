@@ -19,7 +19,6 @@ export async function getAll(req: Request, res: Response, next: NextFunction) {
     next(error);
   }
 }
-
 export async function getById(req: Request, res: Response, next: NextFunction) {
   try {
     const entity = await service.getById(req.params.id);
@@ -37,7 +36,6 @@ export async function create(req: Request, res: Response, next: NextFunction) {
     next(error);
   }
 }
-
 export async function update(req: Request, res: Response, next: NextFunction) {
   const { id, firstName, lastName, email, phone, birthdate, address } = req.body;
   try {
@@ -47,7 +45,6 @@ export async function update(req: Request, res: Response, next: NextFunction) {
     next(error);
   }
 }
-
 export async function deleteById(req: Request, res: Response, next: NextFunction) {
   try {
     const entity = await service.deleteById(req.params.id);
@@ -56,7 +53,6 @@ export async function deleteById(req: Request, res: Response, next: NextFunction
     next(error);
   }
 }
-
 export async function exportExcel(req: Request, res: Response, next: NextFunction) {
   try {
     const fileName = "customer.xlsx";

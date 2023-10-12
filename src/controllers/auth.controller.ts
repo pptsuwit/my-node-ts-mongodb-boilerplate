@@ -58,7 +58,6 @@ async function register(req: Request, res: Response, next: NextFunction) {
 
 // async function refreshToken(req: Request, res: Response, next: NextFunction) {
 //   const token = req.cookies.refreshToken;
-//   console.log(refreshToken);
 //   const ipAddress = req.ip;
 //   try {
 //     const { refreshToken, ...user } = await service.refreshToken({ token, ipAddress });

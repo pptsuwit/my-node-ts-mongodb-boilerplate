@@ -1,20 +1,9 @@
-import express, { Request, Response, NextFunction } from "express";
-import { authorize } from "@middlewares/authorize";
+import { Request, Response, NextFunction } from "express";
 import service from "@services/user.service";
-
 import logger from "@utils/logger";
-const router = express.Router();
+import { getTotalPageSize } from "@utils/utils";
 
-router.get("/user", authorize, getAll);
-router.get("/user/:id", authorize, getById);
-
-router.post("/user", authorize, create);
-router.put("/user", authorize, update);
-router.delete("/user/:id", authorize, deleteById);
-
-export default router;
-
-async function create(req: Request, res: Response, next: NextFunction) {
+export async function create(req: Request, res: Response, next: NextFunction) {
   const { firstName, lastName, username, password } = req.body;
   try {
     const user = await service.createUser({ firstName, lastName, username, password });
@@ -24,8 +13,7 @@ async function create(req: Request, res: Response, next: NextFunction) {
     next(error);
   }
 }
-
-async function update(req: Request, res: Response, next: NextFunction) {
+export async function update(req: Request, res: Response, next: NextFunction) {
   const { id, firstName, lastName, username } = req.body;
   try {
     const user = await service.updateUserById({ id, firstName, lastName, username });
@@ -36,18 +24,20 @@ async function update(req: Request, res: Response, next: NextFunction) {
     next(error);
   }
 }
-
-async function getAll(req: Request, res: Response, next: NextFunction) {
+export async function getAll(req: Request, res: Response, next: NextFunction) {
   try {
-    const users = await service.getAll();
-    res.json(users);
+    const page: number = parseInt(req.query.page as string) || 1;
+    const pageSize: number = parseInt(req.query.pageSize as string) || 10;
+    const data = await service.getAll(page, pageSize);
+    res.json({
+      data: data.data,
+      pagination: { page: page, pageSize: data.data.length, totalPage: getTotalPageSize(data.totalData, pageSize) },
+    });
   } catch (error) {
-    logger.error("Error occurred:", error);
     next(error);
   }
 }
-
-async function getById(req: Request, res: Response, next: NextFunction) {
+export async function getById(req: Request, res: Response, next: NextFunction) {
   // if (req.params.id !== req.user?.id) {
   //   return res.status(401).json({ message: "Unauthorized" });
   // }
@@ -59,8 +49,7 @@ async function getById(req: Request, res: Response, next: NextFunction) {
     next(error);
   }
 }
-
-async function deleteById(req: Request, res: Response, next: NextFunction) {
+export async function deleteById(req: Request, res: Response, next: NextFunction) {
   try {
     const user = await service.deleteById(req.params.id);
     user ? res.json(user) : res.sendStatus(404);

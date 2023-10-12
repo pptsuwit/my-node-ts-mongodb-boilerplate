@@ -370,7 +370,6 @@ describe("Customer Routes", () => {
       mockGetAllCustomers.mockResolvedValue(expectedResponse);
 
       const response = await request(app).get("/api/customer").expect(200);
-      console.log(response.body);
       expect(response.body).toEqual(expectedResponse);
       expect(mockGetAllCustomers).toHaveBeenCalled();
     });
